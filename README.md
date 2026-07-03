@@ -25,7 +25,7 @@ Você pode executar este projeto de duas formas: utilizando o gerenciador de dep
 ### Método 1: Utilizando o pip (Tradicional)
 Se preferir o método convencional utilizando ambientes virtuais do Python (venv) e o arquivo `requirements.txt`:
 
-1.  Crie e ative o ambiente virtual (opcional, mas recomendado):
+1.  Crie e ative o ambiente virtual (opcional, professora pode ignorar):
     ```bash
     # Windows
     python -m venv venv

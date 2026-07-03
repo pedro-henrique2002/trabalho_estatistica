@@ -2,7 +2,7 @@
 
 Trabalho de Estatística aplicado à análise e simulação de desempenho de sistemas.
 
-*   **Versão do Python recomendada:** Python 3.10 ou superior (configurado especificamente para Python 3.14.2).
+*   **Versão do Python recomendada:** configurado especificamente para Python 3.14.2 (Só garanto o funcionamento nessa versão).
 
 ---
 

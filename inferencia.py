@@ -1,7 +1,43 @@
 import math
 import numpy as np
 from scipy import stats
-import utils
+import csv
+import os
+
+def ler_coluna_csv(caminho_arquivo: str, coluna_nome: str) -> np.ndarray:
+    """
+    Lê uma coluna específica de um arquivo CSV pelo nome do cabeçalho
+    e retorna os valores correspondentes em um array NumPy.
+    """
+    if not os.path.exists(caminho_arquivo):
+        raise FileNotFoundError(f"O arquivo {caminho_arquivo} não foi encontrado.")
+        
+    valores = []
+    with open(caminho_arquivo, mode='r', encoding='utf-8') as arquivo:
+        leitor = csv.DictReader(arquivo)
+        for linha in leitor:
+            valores.append(float(linha[coluna_nome]))
+            
+    return np.array(valores)
+
+
+def ler_par_csv(caminho_arquivo: str, coluna_x: str, coluna_y: str) -> tuple[np.ndarray, np.ndarray]:
+    """
+    Lê duas colunas específicas de um arquivo CSV e retorna um par de arrays NumPy (X, Y).
+    Útil para as análises bivariadas e regressões.
+    """
+    if not os.path.exists(caminho_arquivo):
+        raise FileNotFoundError(f"O arquivo {caminho_arquivo} não foi encontrado.")
+        
+    valores_x = []
+    valores_y = []
+    with open(caminho_arquivo, mode='r', encoding='utf-8') as arquivo:
+        leitor = csv.DictReader(arquivo)
+        for linha in leitor:
+            valores_x.append(float(linha[coluna_x]))
+            valores_y.append(float(linha[coluna_y]))
+            
+    return np.array(valores_x), np.array(valores_y)
 
 
 def intervalo_confianca(dados: list[float] | np.ndarray, alpha: float = 0.05) -> tuple[float, float, float, float]:

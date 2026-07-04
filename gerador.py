@@ -3,13 +3,7 @@ import csv
 import numpy as np
 
 
-def calcula_media(dados: list[float] | np.ndarray) -> float:
-    """
-    Calcula a média aritmética simples de um conjunto de dados utilizando NumPy.
-    """
-    if len(dados) == 0:
-        return 0.0
-    return float(np.mean(dados))
+
 
 
 class GeradorDeDados:
@@ -28,47 +22,45 @@ class GeradorDeDados:
         if self.seed is not None:
             np.random.seed(self.seed)
 
-    def gerar_cenario_a(self) -> np.ndarray:
+    def _gerar_normal_amostra(self, n: int, media_alvo: float, desvio_alvo: float) -> np.ndarray:
         """
-        Cenário A: 40 tempos de resposta de API REST.
-        Gera uma amostra de tamanho 40 a partir de uma distribuição Normal 
-        com média de 320 ms e desvio padrão de 45 ms.
+        Gera um array unidimensional com média e desvio padrão amostral exatos.
         """
-        return np.random.normal(loc=320.0, scale=45.0, size=40)
+        if n <= 1:
+            raise ValueError("O tamanho da amostra deve ser maior que 1.")
+            
+        brutos = np.random.randn(n)
+        brutos_normalizados = (brutos - np.mean(brutos)) / np.std(brutos, ddof=1)
+        return media_alvo + desvio_alvo * brutos_normalizados
 
-    def gerar_cenario_b(self) -> np.ndarray:
+    def gerar_cenario_a(self, n: int = 40, media_alvo: float = 320.0, desvio_alvo: float = 45.0) -> np.ndarray:
         """
-        Cenário B: 25 tempos de execução de compilador.
-        Gera uma amostra de tamanho 25 a partir de uma distribuição Normal 
-        com média de 47 s e desvio padrão de 8 s.
+        Cenário A: Tempos de resposta de API REST. Parâmetros padrão da prova: n=40, média=320, desvio=45.
         """
-        return np.random.normal(loc=47.0, scale=8.0, size=25)
+        return self._gerar_normal_amostra(n=n, media_alvo=media_alvo, desvio_alvo=desvio_alvo)
+
+    def gerar_cenario_b(self, n: int = 25, media_alvo: float = 47.0, desvio_alvo: float = 8.0) -> np.ndarray:
+        """
+        Cenário B: Tempos de execução de compilador. Parâmetros padrão da prova: n=25, média=47, desvio=8.
+        """
+        return self._gerar_normal_amostra(n=n, media_alvo=media_alvo, desvio_alvo=desvio_alvo)
 
     def gerar_cenario_c(self) -> np.ndarray:
         """
         Cenário C: 15 pares (X, Y) correspondentes a Cache L2 (MB) e IPC.
-        Gera dados normais bivariados baseados na matriz de covariância teórica calculada 
-        a partir da prova (Variância de X = 3.5714, Variância de Y = 2.1429, Covariância = 2.5).
+        Gera dados bivariados normais com os somatórios exatos estabelecidos na prova.
         """
-        # Médias das duas variáveis (X: Cache L2, Y: IPC)
+        # Variáveis físicas fixas estabelecidas na prova
         medias = [5.0, 3.0]
-        
-        # Matriz de covariância teórica construída a partir dos somatórios:
-        # SS_xx = 50 -> variância_x = 50 / 14 = 3.5714
-        # SS_yy = 30 -> variância_y = 30 / 14 = 2.1429
-        # SS_xy = 35 -> covariância_xy = 35 / 14 = 2.5
         covariancia = [
             [3.5714, 2.5],
             [2.5, 2.1429]
         ]
-        
-        # Geração direta usando distribuição normal bivariada
         return np.random.multivariate_normal(mean=medias, cov=covariancia, size=15)
 
     def salvar_csv(self, caminho_arquivo: str, cabecalho: list[str], dados: np.ndarray) -> None:
         """
         Salva os dados de um array NumPy no arquivo CSV especificado.
-        Cria as pastas necessárias no caminho caso elas não existam.
         """
         diretorio = os.path.dirname(caminho_arquivo)
         if diretorio:
@@ -86,7 +78,7 @@ class GeradorDeDados:
 
     def gerar_e_salvar_todos(self, pasta_destino: str = "dados") -> None:
         """
-        Gera e salva todos os cenários na pasta de destino utilizando as funções do NumPy.
+        Gera e salva todos os cenários na pasta de destino utilizando as configurações originais da prova.
         """
         dados_a = self.gerar_cenario_a()
         dados_b = self.gerar_cenario_b()
@@ -95,3 +87,11 @@ class GeradorDeDados:
         self.salvar_csv(os.path.join(pasta_destino, "cenario_a.csv"), ["tempo_resposta"], dados_a)
         self.salvar_csv(os.path.join(pasta_destino, "cenario_b.csv"), ["tempo_execucao"], dados_b)
         self.salvar_csv(os.path.join(pasta_destino, "cenario_c.csv"), ["cache_l2", "ipc"], dados_c)
+
+    def calcula_media(self, dados: list[float] | np.ndarray) -> float:
+        """
+        Calcula a média aritmética simples de um conjunto de dados utilizando NumPy.
+        """
+        if len(dados) == 0:
+            return 0.0
+        return float(np.mean(dados))

@@ -1,3 +1,5 @@
+PS C:\Users\Pedro\Desktop\Workspace\trabalho_estatistica> poetry run python -m main
+
 =======================================================
  CONFIGURAÇÃO DE INICIALIZAÇÃO
 =======================================================
@@ -29,15 +31,21 @@ Parâmetros Ativos: n = 40 | Média = 320.0 ms | Desvio = 45.0 ms
 =======================================================
 Escolha uma opção: 1
 
---- Estatísticas (Lendo do CSV) ---
-Amostra Lida (n):         40
-Média Amostral Lida:      320.0000 ms
-Desvio Padrão Lodo:       45.0000 ms
-Intervalo de Confiança:   [305.6083 ms, 334.3917 ms]
-Tamanho Mínimo Amostra (IC Amplitude 20ms): 78 amostras
+-----------------------------------------------------------------
+ COMPARATIVO DE RESULTADOS: CENÁRIO A - API REST
+-----------------------------------------------------------------
+Métrica Estatística          | Valor Calculado (CSV) | Valor Teórico (Prova)
+----------------------------------------------------------------------------
+Tamanho da Amostra (n)       | 40                    | 40                   
+Média Amostral (x_bar)       | 320.0000           ms | 320.0000           ms
+Desvio Padrão Amostral (s)   | 45.0000            ms | 45.0000            ms
+Intervalo de Confiança       | [305.61; 334.39] ms | [305.61; 334.39] ms
+Amostra Mínima (Amp. 20ms)   | 78                    | 78                   
+----------------------------------------------------------------------------
 
 Análise de SLA (Limite: 350 ms):
--> Em conformidade. Limite superior (334.39 ms) é menor que 350 ms.
+-> Amostra Real:  Em conformidade.
+-> Teórico Prova: Em conformidade.
 
 Pressione ENTER para continuar...
 
@@ -94,15 +102,22 @@ Parâmetros Ativos: n = 25 | Média = 47.0 s | Desvio = 8.0 s
 =======================================================
 Escolha uma opção: 1
 
---- Teste de Hipótese (Lendo do CSV) ---
-Amostra Lida (n):         25
-Média Amostral Lida:      47.0000 s
-Estatística t calculada:  -1.8750
-Valor crítico de t:       -1.7109
-Decisão (Rejeita H0?):    True
+-----------------------------------------------------------------
+ COMPARATIVO DE RESULTADOS: CENÁRIO B - TESTE DE HIPÓTESES
+-----------------------------------------------------------------
+Métrica Estatística          | Valor Calculado (CSV) | Valor Teórico (Prova)
+----------------------------------------------------------------------------
+Tamanho da Amostra (n)       | 25                    | 25                   
+Média Amostral (x_bar)       | 47.0000            s  | 47.0000            s
+Desvio Padrão Amostral (s)   | 8.0000             s  | 8.0000             s
+Estatística t calculada      | -1.8750               | -1.8750              
+Valor Crítico de t           | -1.7109               | -1.7109              
+Rejeita H0? (Signif. 5%)     | True                  | True                 
+----------------------------------------------------------------------------
 
-Conclusão:
-Rejeita-se H0 ao nível de significância de 5%. Há evidências estatísticas significativas de que a média real (47.0000) é menor que 50.0.
+Conclusão Prática:
+-> Amostra Real:  Novo compilador é eficaz (Rejeita H0).
+-> Teórico Prova: Novo compilador é eficaz (Rejeita H0).
 
 Pressione ENTER para continuar...
 
@@ -162,12 +177,17 @@ Parâmetros Fixos da Prova:
 =======================================================
 Escolha uma opção: 1
 
---- Regressão e Correlação (Lendo do CSV) ---
-Pares analisados (n):            15
-Correlação de Pearson (r):       0.9271
-Coeficiente de Determinação (R²): 0.8595
-Equação Ajustada da Reta:        y = -1.0208 + (0.7908) * x
-IPC previsto para Cache de 8MB:  5.3058
+-----------------------------------------------------------------
+ COMPARATIVO DE RESULTADOS: CENÁRIO C - REGRESSÃO LINEAR
+-----------------------------------------------------------------
+Métrica Estatística          | Valor Calculado (CSV) | Valor Teórico (Prova)
+----------------------------------------------------------------------------
+Pares Analisados (n)         | 15                    | 15                   
+Correlação de Pearson (r)    | 0.9037             | 0.9037            
+Coeficiente R²               | 0.8167             | 0.8167            
+Equação Reta de Regressão    | y = -0.50 + (0.70)*x | y = -0.50 + (0.70)*x
+Previsão IPC (Cache 8MB)     | 5.1000             | 5.1000            
+----------------------------------------------------------------------------
 
 Pressione ENTER para continuar...
 
@@ -218,3 +238,4 @@ Escolha uma opção: 0
 Escolha um Cenário: 0
 
 Finalizando o programa. Até logo!
+PS C:\Users\Pedro\Desktop\Workspace\trabalho_estatistica> 

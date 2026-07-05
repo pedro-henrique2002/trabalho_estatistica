@@ -2,6 +2,8 @@ import os
 import inferencia
 import regressao
 from gerador import GeradorDeDados
+from scipy import stats  # Importado para recalcular os valores teóricos dinamicamente caso o 'n' mude
+import numpy as np
 
 
 def obter_semente() -> int | None:
@@ -48,23 +50,42 @@ def gerenciar_cenario_a(gerador: GeradorDeDados) -> None:
             break
             
         elif op == "1":
-            print("\n--- Estatísticas (Lendo do CSV) ---")
+            print("\n" + "-"*65)
+            print(" COMPARATIVO DE RESULTADOS: CENÁRIO A - API REST")
+            print("-"*65)
             try:
                 dados = inferencia.ler_coluna_csv(caminho_csv, "tempo_resposta")
-                lim_inf, lim_sup, media, desvio = inferencia.intervalo_confianca(dados, alpha=0.05)
-                n_min = inferencia.tamanho_amostra(desvio, amplitude=20.0, alpha=0.05)
+                n_lido = len(dados)
                 
-                print(f"Amostra Lida (n):         {len(dados)}")
-                print(f"Média Amostral Lida:      {media:.4f} ms")
-                print(f"Desvio Padrão Lodo:       {desvio:.4f} ms")
-                print(f"Intervalo de Confiança:   [{lim_inf:.4f} ms, {lim_sup:.4f} ms]")
-                print(f"Tamanho Mínimo Amostra (IC Amplitude 20ms): {n_min} amostras")
+                # Valores Calculados Amostrais (com aleatoriedade real do CSV)
+                lim_inf_c, lim_sup_c, media_c, desvio_c = inferencia.intervalo_confianca(dados, alpha=0.05)
+                n_min_c = inferencia.tamanho_amostra(desvio_c, amplitude=20.0, alpha=0.05)
+                
+                # Valores Teóricos Dinâmicos (Calculados dinamicamente para o 'n' ativo para evitar bugs)
+                df_t = n_atual - 1
+                if df_t > 0:
+                    t_crit_teorico = stats.t.ppf(0.975, df_t)
+                    se_t = desvio_atual / (n_atual ** 0.5)
+                    me_t = t_crit_teorico * se_t
+                    lim_inf_t = media_atual - me_t
+                    lim_sup_t = media_atual + me_t
+                    n_min_t = inferencia.tamanho_amostra(desvio_atual, amplitude=20.0, alpha=0.05)
+                else:
+                    lim_inf_t, lim_sup_t, n_min_t = 0.0, 0.0, 0
+                
+                # Exibição tabulada comparativa
+                print(f"{'Métrica Estatística':<28} | {'Valor Calculado (CSV)':<21} | {'Valor Teórico (Prova)':<21}")
+                print("-" * 76)
+                print(f"{'Tamanho da Amostra (n)':<28} | {n_lido:<21} | {n_atual:<21}")
+                print(f"{'Média Amostral (x_bar)':<28} | {media_c:<18.4f} ms | {media_atual:<18.4f} ms")
+                print(f"{'Desvio Padrão Amostral (s)':<28} | {desvio_c:<18.4f} ms | {desvio_atual:<18.4f} ms")
+                print(f"{'Intervalo de Confiança':<28} | [{lim_inf_c:.2f}; {lim_sup_c:.2f}] ms | [{lim_inf_t:.2f}; {lim_sup_t:.2f}] ms")
+                print(f"{'Amostra Mínima (Amp. 20ms)':<28} | {n_min_c:<21} | {n_min_t:<21}")
+                print("-" * 76)
                 
                 print("\nAnálise de SLA (Limite: 350 ms):")
-                if lim_sup < 350.0:
-                    print(f"-> Em conformidade. Limite superior ({lim_sup:.2f} ms) é menor que 350 ms.")
-                else:
-                    print(f"-> Fora de conformidade. Limite superior ({lim_sup:.2f} ms) ultrapassa ou iguala 350 ms.")
+                print(f"-> Amostra Real:  " + ("Em conformidade." if lim_sup_c < 350.0 else "Fora de conformidade."))
+                print(f"-> Teórico Prova: " + ("Em conformidade." if lim_sup_t < 350.0 else "Fora de conformidade."))
             except Exception as e:
                 print(f"Erro ao ler/processar dados: {e}")
             input("\nPressione ENTER para continuar...")
@@ -140,17 +161,40 @@ def gerenciar_cenario_b(gerador: GeradorDeDados) -> None:
             break
             
         elif op == "1":
-            print("\n--- Teste de Hipótese (Lendo do CSV) ---")
+            print("\n" + "-"*65)
+            print(" COMPARATIVO DE RESULTADOS: CENÁRIO B - TESTE DE HIPÓTESES")
+            print("-"*65)
             try:
                 dados = inferencia.ler_coluna_csv(caminho_csv, "tempo_execucao")
-                t_calc, t_crit, rejeita, conclusao = inferencia.teste_t_unilateral(dados, mu0=50.0, alpha=0.05)
+                n_lido = len(dados)
                 
-                print(f"Amostra Lida (n):         {len(dados)}")
-                print(f"Média Amostral Lida:      {gerador.calcula_media(dados):.4f} s")
-                print(f"Estatística t calculada:  {t_calc:.4f}")
-                print(f"Valor crítico de t:       {t_crit:.4f}")
-                print(f"Decisão (Rejeita H0?):    {rejeita}")
-                print(f"\nConclusão:\n{conclusao}")
+                # Valores Calculados Amostrais (do CSV)
+                t_calc_c, t_crit_c, rejeita_c, _ = inferencia.teste_t_unilateral(dados, mu0=50.0, alpha=0.05)
+                media_c = float(np.mean(dados))
+                desvio_c = float(np.std(dados, ddof=1))
+                
+                # Valores Teóricos Dinâmicos (Calculados para o 'n' ativo para evitar bugs)
+                df_t = n_atual - 1
+                if df_t > 0:
+                    t_crit_t = stats.t.ppf(0.05, df_t)
+                    t_calc_t = (media_atual - 50.0) / (desvio_atual / (n_atual ** 0.5))
+                    rejeita_t = t_calc_t < t_crit_t
+                else:
+                    t_calc_t, t_crit_t, rejeita_t = 0.0, 0.0, False
+                
+                print(f"{'Métrica Estatística':<28} | {'Valor Calculado (CSV)':<21} | {'Valor Teórico (Prova)':<21}")
+                print("-" * 76)
+                print(f"{'Tamanho da Amostra (n)':<28} | {n_lido:<21} | {n_atual:<21}")
+                print(f"{'Média Amostral (x_bar)':<28} | {media_c:<18.4f} s  | {media_atual:<18.4f} s")
+                print(f"{'Desvio Padrão Amostral (s)':<28} | {desvio_c:<18.4f} s  | {desvio_atual:<18.4f} s")
+                print(f"{'Estatística t calculada':<28} | {t_calc_c:<21.4f} | {t_calc_t:<21.4f}")
+                print(f"{'Valor Crítico de t':<28} | {t_crit_c:<21.4f} | {t_crit_t:<21.4f}")
+                print(f"{'Rejeita H0? (Signif. 5%)':<28} | {str(rejeita_c):<21} | {str(rejeita_t):<21}")
+                print("-" * 76)
+                
+                print("\nConclusão Prática:")
+                print(f"-> Amostra Real:  " + ("Novo compilador é eficaz (Rejeita H0)." if rejeita_c else "Sem evidências para rejeitar H0."))
+                print(f"-> Teórico Prova: " + ("Novo compilador é eficaz (Rejeita H0)." if rejeita_t else "Sem evidências para rejeitar H0."))
             except Exception as e:
                 print(f"Erro ao ler/processar dados: {e}")
             input("\nPressione ENTER para continuar...")
@@ -227,18 +271,32 @@ def gerenciar_cenario_c() -> None:
             break
             
         elif op == "1":
-            print("\n--- Regressão e Correlação (Lendo do CSV) ---")
+            print("\n" + "-"*65)
+            print(" COMPARATIVO DE RESULTADOS: CENÁRIO C - REGRESSÃO LINEAR")
+            print("-"*65)
             try:
                 x, y = inferencia.ler_par_csv(caminho_csv, "cache_l2", "ipc")
-                r = regressao.correlacao_pearson(x, y)
-                a, b, r2 = regressao.regressao_linear(x, y)
-                previsao_8mb = regressao.prever(8.0, a, b)
                 
-                print(f"Pares analisados (n):            {len(x)}")
-                print(f"Correlação de Pearson (r):       {r:.4f}")
-                print(f"Coeficiente de Determinação (R²): {r2:.4f}")
-                print(f"Equação Ajustada da Reta:        y = {a:.4f} + ({b:.4f}) * x")
-                print(f"IPC previsto para Cache de 8MB:  {previsao_8mb:.4f}")
+                # Valores Calculados Amostrais (do CSV)
+                r_c = regressao.correlacao_pearson(x, y)
+                a_c, b_c, r2_c = regressao.regressao_linear(x, y)
+                previsao_8_c = regressao.prever(8.0, a_c, b_c)
+                
+                # Valores Teóricos Fixos (da Prova)
+                r_t = 0.9037
+                a_t = -0.5000
+                b_t = 0.7000
+                r2_t = 0.8167
+                previsao_8_t = a_t + b_t * 8.0
+                
+                print(f"{'Métrica Estatística':<28} | {'Valor Calculado (CSV)':<21} | {'Valor Teórico (Prova)':<21}")
+                print("-" * 76)
+                print(f"{'Pares Analisados (n)':<28} | {len(x):<21} | {15:<21}")
+                print(f"{'Correlação de Pearson (r)':<28} | {r_c:<18.4f} | {r_t:<18.4f}")
+                print(f"{'Coeficiente R²':<28} | {r2_c:<18.4f} | {r2_t:<18.4f}")
+                print(f"{'Equação Reta de Regressão':<28} | y = {a_c:.2f} + ({b_c:.2f})*x | y = {a_t:.2f} + ({b_t:.2f})*x")
+                print(f"{'Previsão IPC (Cache 8MB)':<28} | {previsao_8_c:<18.4f} | {previsao_8_t:<18.4f}")
+                print("-" * 76)
             except Exception as e:
                 print(f"Erro ao ler/processar dados: {e}")
             input("\nPressione ENTER para continuar...")

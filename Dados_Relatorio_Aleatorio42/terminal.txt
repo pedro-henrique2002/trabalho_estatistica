@@ -1,0 +1,238 @@
+=======================================================
+ CONFIGURAÇÃO DE INICIALIZAÇÃO
+=======================================================
+Digite uma semente (ou pressione ENTER para semente aleatória): 42
+-> Inicializando com a semente definida: 42
+
+Gerando base de dados nos arquivos CSV...
+-> Arquivos de dados padrão preparados com sucesso.
+
+=======================================================
+ MENU PRINCIPAL: ESTATÍSTICA DE DESEMPENHO DE SISTEMAS
+=======================================================
+1. Cenário A - API REST
+2. Cenário B - Compilador
+3. Cenário C - Cache vs IPC
+0. Sair do Programa
+=======================================================
+Escolha um Cenário: 1
+
+=======================================================
+ SUBMENU: CENÁRIO A - API REST
+=======================================================
+Parâmetros Ativos: n = 40 | Média = 320.0 ms | Desvio = 45.0 ms
+-------------------------------------------------------
+1. Executar Análise Estatística (IC, SLA e Amostra Mínima)
+2. Visualizar Gráficos de Distribuição (Leitura do CSV)
+3. Alterar Parâmetros de Geração de Dados
+0. Voltar ao Menu Anterior
+=======================================================
+Escolha uma opção: 1
+
+-----------------------------------------------------------------
+ COMPARATIVO DE RESULTADOS: CENÁRIO A - API REST
+-----------------------------------------------------------------
+Métrica Estatística          | Valor Calculado (CSV) | Valor Teórico (Prova)
+----------------------------------------------------------------------------
+Tamanho da Amostra (n)       | 40                    | 40                   
+Média Amostral (x_bar)       | 310.1613           ms | 320.0000           ms
+Desvio Padrão Amostral (s)   | 42.8764            ms | 45.0000            ms
+Intervalo de Confiança       | [296.45; 323.87] ms | [305.61; 334.39] ms
+Amostra Mínima (Amp. 20ms)   | 71                    | 78                   
+----------------------------------------------------------------------------
+
+Análise de SLA (Limite: 350 ms):
+-> Amostra Real:  Em conformidade.
+-> Teórico Prova: Em conformidade.
+
+Pressione ENTER para continuar...
+
+=======================================================
+ SUBMENU: CENÁRIO A - API REST
+=======================================================
+Parâmetros Ativos: n = 40 | Média = 320.0 ms | Desvio = 45.0 ms
+-------------------------------------------------------
+1. Executar Análise Estatística (IC, SLA e Amostra Mínima)
+2. Visualizar Gráficos de Distribuição (Leitura do CSV)
+3. Alterar Parâmetros de Geração de Dados
+0. Voltar ao Menu Anterior
+=======================================================
+Escolha uma opção: 2
+
+--- Visualização de Gráficos (Lendo do CSV) ---
+1. Exibindo Curva de Densidade de Probabilidade (KDE)...
+2. Exibindo Diagrama de Caixa (Boxplot)...
+-> Gráficos exibidos e salvos na pasta 'graficos/'
+
+Pressione ENTER para continuar...
+
+=======================================================
+ SUBMENU: CENÁRIO A - API REST
+=======================================================
+Parâmetros Ativos: n = 40 | Média = 320.0 ms | Desvio = 45.0 ms
+-------------------------------------------------------
+1. Executar Análise Estatística (IC, SLA e Amostra Mínima)
+2. Visualizar Gráficos de Distribuição (Leitura do CSV)
+3. Alterar Parâmetros de Geração de Dados
+0. Voltar ao Menu Anterior
+=======================================================
+Escolha uma opção: 0
+
+=======================================================
+ MENU PRINCIPAL: ESTATÍSTICA DE DESEMPENHO DE SISTEMAS
+=======================================================
+1. Cenário A - API REST
+2. Cenário B - Compilador
+3. Cenário C - Cache vs IPC
+0. Sair do Programa
+=======================================================
+Escolha um Cenário: 2
+
+=======================================================
+ SUBMENU: CENÁRIO B - COMPILADOR
+=======================================================
+Parâmetros Ativos: n = 25 | Média = 47.0 s | Desvio = 8.0 s
+-------------------------------------------------------
+1. Executar Teste de Hipóteses (Teste T Unilateral)
+2. Visualizar Gráfico de Distribuição (Leitura do CSV)
+3. Alterar Parâmetros de Geração de Dados
+0. Voltar ao Menu Anterior
+=======================================================
+Escolha uma opção: 1
+
+-----------------------------------------------------------------
+ COMPARATIVO DE RESULTADOS: CENÁRIO B - TESTE DE HIPÓTESES
+-----------------------------------------------------------------
+Métrica Estatística          | Valor Calculado (CSV) | Valor Teórico (Prova)
+----------------------------------------------------------------------------
+Tamanho da Amostra (n)       | 25                    | 25                   
+Média Amostral (x_bar)       | 46.1396            s  | 47.0000            s
+Desvio Padrão Amostral (s)   | 6.5536             s  | 8.0000             s
+Estatística t calculada      | -2.9452               | -1.8750              
+Valor Crítico de t           | -1.7109               | -1.7109              
+Rejeita H0? (Signif. 5%)     | True                  | True                 
+----------------------------------------------------------------------------
+
+Conclusão Prática:
+-> Amostra Real:  Novo compilador é eficaz (Rejeita H0).
+-> Teórico Prova: Novo compilador é eficaz (Rejeita H0).
+
+Pressione ENTER para continuar...
+
+=======================================================
+ SUBMENU: CENÁRIO B - COMPILADOR
+=======================================================
+Parâmetros Ativos: n = 25 | Média = 47.0 s | Desvio = 8.0 s
+-------------------------------------------------------
+1. Executar Teste de Hipóteses (Teste T Unilateral)
+2. Visualizar Gráfico de Distribuição (Leitura do CSV)
+3. Alterar Parâmetros de Geração de Dados
+0. Voltar ao Menu Anterior
+=======================================================
+Escolha uma opção: 2
+
+--- Visualização de Gráficos (Lendo do CSV) ---
+1. Exibindo Curva de Densidade de Probabilidade (KDE)...
+2. Exibindo Diagrama de Caixa (Boxplot)...
+-> Gráficos exibidos e salvos na pasta 'graficos/'
+
+Pressione ENTER para continuar...
+
+=======================================================
+ SUBMENU: CENÁRIO B - COMPILADOR
+=======================================================
+Parâmetros Ativos: n = 25 | Média = 47.0 s | Desvio = 8.0 s
+-------------------------------------------------------
+1. Executar Teste de Hipóteses (Teste T Unilateral)
+2. Visualizar Gráfico de Distribuição (Leitura do CSV)
+3. Alterar Parâmetros de Geração de Dados
+0. Voltar ao Menu Anterior
+=======================================================
+Escolha uma opção: 0
+
+=======================================================
+ MENU PRINCIPAL: ESTATÍSTICA DE DESEMPENHO DE SISTEMAS
+=======================================================
+1. Cenário A - API REST
+2. Cenário B - Compilador
+3. Cenário C - Cache vs IPC
+0. Sair do Programa
+=======================================================
+Escolha um Cenário: 3
+
+=======================================================
+ SUBMENU: CENÁRIO C - CACHE L2 VS IPC
+=======================================================
+Parâmetros Fixos da Prova:
+  - Amostra (n):  15 pares de dados
+  - Somatório X:  75 (Média Cache = 5.0 MB)
+  - Somatório Y:  45 (Média IPC = 3.0)
+  - Somatórios Quadráticos: Sum(x²)=425, Sum(y²)=165, Sum(xy)=260
+-------------------------------------------------------
+1. Executar Análise de Regressão e Correlação (Pearson, R²)
+2. Visualizar Gráficos Estatísticos (Leitura do CSV)
+0. Voltar ao Menu Anterior
+=======================================================
+Escolha uma opção: 1
+
+-----------------------------------------------------------------
+ COMPARATIVO DE RESULTADOS: CENÁRIO C - REGRESSÃO LINEAR
+-----------------------------------------------------------------
+Métrica Estatística          | Valor Calculado (CSV) | Valor Teórico (Prova)
+----------------------------------------------------------------------------
+Pares Analisados (n)         | 15                    | 15                   
+Correlação de Pearson (r)    | 0.9271             | 0.9037            
+Coeficiente R²               | 0.8595             | 0.8167            
+Equação Reta de Regressão    | y = -1.02 + (0.79)*x | y = -0.50 + (0.70)*x
+Previsão IPC (Cache 8MB)     | 5.3058             | 5.1000            
+----------------------------------------------------------------------------
+
+Pressione ENTER para continuar...
+
+=======================================================
+ SUBMENU: CENÁRIO C - CACHE L2 VS IPC
+=======================================================
+Parâmetros Fixos da Prova:
+  - Amostra (n):  15 pares de dados
+  - Somatório X:  75 (Média Cache = 5.0 MB)
+  - Somatório Y:  45 (Média IPC = 3.0)
+  - Somatórios Quadráticos: Sum(x²)=425, Sum(y²)=165, Sum(xy)=260
+-------------------------------------------------------
+1. Executar Análise de Regressão e Correlação (Pearson, R²)
+2. Visualizar Gráficos Estatísticos (Leitura do CSV)
+0. Voltar ao Menu Anterior
+=======================================================
+Escolha uma opção: 2
+
+--- Carregando Gráficos (Lendo do CSV) ---
+Exibindo gráficos de dispersão e reta ajustada...
+-> Gráficos exibidos e salvos na pasta 'graficos/'
+
+Pressione ENTER para continuar...
+
+=======================================================
+ SUBMENU: CENÁRIO C - CACHE L2 VS IPC
+=======================================================
+Parâmetros Fixos da Prova:
+  - Amostra (n):  15 pares de dados
+  - Somatório X:  75 (Média Cache = 5.0 MB)
+  - Somatório Y:  45 (Média IPC = 3.0)
+  - Somatórios Quadráticos: Sum(x²)=425, Sum(y²)=165, Sum(xy)=260
+-------------------------------------------------------
+1. Executar Análise de Regressão e Correlação (Pearson, R²)
+2. Visualizar Gráficos Estatísticos (Leitura do CSV)
+0. Voltar ao Menu Anterior
+=======================================================
+Escolha uma opção: 0
+
+=======================================================
+ MENU PRINCIPAL: ESTATÍSTICA DE DESEMPENHO DE SISTEMAS
+=======================================================
+1. Cenário A - API REST
+2. Cenário B - Compilador
+3. Cenário C - Cache vs IPC
+0. Sair do Programa
+=======================================================
+Escolha um Cenário: 0
+
+Finalizando o programa. Até logo!

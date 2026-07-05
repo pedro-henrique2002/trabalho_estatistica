@@ -3,9 +3,6 @@ import csv
 import numpy as np
 
 
-
-
-
 class GeradorDeDados:
     """
     Classe para simular e salvar os dados estatísticos dos cenários utilizando
@@ -22,35 +19,25 @@ class GeradorDeDados:
         if self.seed is not None:
             np.random.seed(self.seed)
 
-    def _gerar_normal_amostra(self, n: int, media_alvo: float, desvio_alvo: float) -> np.ndarray:
-        """
-        Gera um array unidimensional com média e desvio padrão amostral exatos.
-        """
-        if n <= 1:
-            raise ValueError("O tamanho da amostra deve ser maior que 1.")
-            
-        brutos = np.random.randn(n)
-        brutos_normalizados = (brutos - np.mean(brutos)) / np.std(brutos, ddof=1)
-        return media_alvo + desvio_alvo * brutos_normalizados
-
     def gerar_cenario_a(self, n: int = 40, media_alvo: float = 320.0, desvio_alvo: float = 45.0) -> np.ndarray:
         """
         Cenário A: Tempos de resposta de API REST. Parâmetros padrão da prova: n=40, média=320, desvio=45.
+        Gera dados puramente estocásticos (amostragem real com variação e erro amostral).
         """
-        return self._gerar_normal_amostra(n=n, media_alvo=media_alvo, desvio_alvo=desvio_alvo)
+        return np.random.normal(loc=media_alvo, scale=desvio_alvo, size=n)
 
     def gerar_cenario_b(self, n: int = 25, media_alvo: float = 47.0, desvio_alvo: float = 8.0) -> np.ndarray:
         """
         Cenário B: Tempos de execução de compilador. Parâmetros padrão da prova: n=25, média=47, desvio=8.
+        Gera dados puramente estocásticos (amostragem real com variação e erro amostral).
         """
-        return self._gerar_normal_amostra(n=n, media_alvo=media_alvo, desvio_alvo=desvio_alvo)
+        return np.random.normal(loc=media_alvo, scale=desvio_alvo, size=n)
 
     def gerar_cenario_c(self) -> np.ndarray:
         """
         Cenário C: 15 pares (X, Y) correspondentes a Cache L2 (MB) e IPC.
-        Gera dados bivariados normais com os somatórios exatos estabelecidos na prova.
+        Gera dados bivariados normais puros (com flutuação amostral real) a partir da covariância teórica.
         """
-        # Variáveis físicas fixas estabelecidas na prova
         medias = [5.0, 3.0]
         covariancia = [
             [3.5714, 2.5],
